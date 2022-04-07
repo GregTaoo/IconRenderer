@@ -17,7 +17,6 @@ public class IconRenderer implements ModInitializer {
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("exporticons")
 				.then(ClientCommandManager.argument("modid", StringArgumentType.string())
 						.executes((context) -> {
-							context.getSource().getPlayer().sendMessage(Text.of("Entity renderer is still under testing!"), false);
 							String modId = context.getArgument("modid", String.class);
 							try {
 								new FileHelper(modId);
