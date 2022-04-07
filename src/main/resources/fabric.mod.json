@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "iconr",
+  "version": "${version}",
+
+  "name": "IconRenderer",
+  "description": "IconRenderer",
+  "authors": [
+    "GregTao"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "MIT",
+  "icon": "assets/iconr/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "top.gregtao.iconrenderer.IconRenderer"
+    ]
+  },
+  "mixins": [
+    "iconrenderer.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
