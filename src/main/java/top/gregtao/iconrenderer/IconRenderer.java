@@ -9,6 +9,8 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.SimpleFramebuffer;
@@ -25,11 +27,13 @@ import net.minecraft.util.math.Vec3f;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
+import top.gregtao.iconrenderer.util.Gif;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Collection;
 
 public class IconRenderer implements ClientModInitializer {
 	public static Logger logger = LogManager.getLogger("IconRenderer");
@@ -50,7 +54,22 @@ public class IconRenderer implements ClientModInitializer {
 						})
 				)
 		);
-		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("shootgif")
+		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("exportallicons")
+				.executes(context -> {
+					Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
+					mods.forEach(mod -> {
+						if (mod.getContainingMod().isPresent()) {
+							try {
+								new FileHelper(mod.getMetadata().getId());
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					return 1;
+				})
+		);
+		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("shootmob")
 				.then(ClientCommandManager.literal("frame").then(ClientCommandManager.argument("frames", IntegerArgumentType.integer(0, 1000))
 						.executes(context -> {
 							maxSize = IntegerArgumentType.getInteger(context, "frames");

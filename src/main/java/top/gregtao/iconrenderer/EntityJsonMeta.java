@@ -2,6 +2,7 @@ package top.gregtao.iconrenderer;
 
 import com.google.gson.JsonObject;
 import net.minecraft.entity.LivingEntity;
+import top.gregtao.iconrenderer.util.RenderType;
 
 public class EntityJsonMeta {
     public LivingEntity entity;

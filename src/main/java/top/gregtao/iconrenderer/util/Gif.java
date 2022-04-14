@@ -1,4 +1,4 @@
-package top.gregtao.iconrenderer;
+package top.gregtao.iconrenderer.util;
 
 import javax.imageio.*;
 import javax.imageio.metadata.IIOInvalidTreeException;

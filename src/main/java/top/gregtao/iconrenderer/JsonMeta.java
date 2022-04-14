@@ -7,6 +7,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.registry.Registry;
+import top.gregtao.iconrenderer.util.RenderType;
 
 import java.util.ArrayList;
 import java.util.List;
