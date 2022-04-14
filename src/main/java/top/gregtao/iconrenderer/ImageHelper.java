@@ -16,15 +16,20 @@ public class ImageHelper {
         this.jsonMeta = jsonMeta;
         this.frameHelper1 = new FrameHelper(128, jsonMeta.itemStack);
         this.frameHelper2 = new FrameHelper(32, jsonMeta.itemStack);
+        String path = FileHelper.imagePathBI.getPath() + "/" + jsonMeta.regName.split(":")[0] + "/";
 
         try (NativeImage image = fromFrame(this.frameHelper1.framebuffer)) {
             this.jsonMeta.largeIcon = Base64.getEncoder().encodeToString(image.getBytes());
+            String file = path + jsonMeta.regName.replace(':', '-') + "_large.png";
+            if (FileHelper.createFile(file)) image.writeTo(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try (NativeImage image = fromFrame(this.frameHelper2.framebuffer)) {
             this.jsonMeta.smallIcon = Base64.getEncoder().encodeToString(image.getBytes());
+            String file = path + jsonMeta.regName.replace(':', '-') + "_small.png";
+            if (FileHelper.createFile(file)) image.writeTo(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,8 +38,12 @@ public class ImageHelper {
     public ImageHelper(EntityJsonMeta jsonMeta) {
         this.entityJsonMeta = jsonMeta;
         this.frameHelper1 = new FrameHelper(128, jsonMeta.entity);
+        String path = FileHelper.imagePathEntity.getPath() + "/";
+
         try (NativeImage image = fromFrame(this.frameHelper1.framebuffer)) {
             this.entityJsonMeta.icon = Base64.getEncoder().encodeToString(image.getBytes());
+            String file = path + jsonMeta.regName.replace(':', '-') + ".png";
+            if (FileHelper.createFile(file)) image.writeTo(file);
         } catch (IOException e) {
             e.printStackTrace();
         }

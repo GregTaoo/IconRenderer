@@ -4,26 +4,25 @@
   "version": "${version}",
 
   "name": "IconRenderer",
-  "description": "IconRenderer",
+  "description": "IconRenderer for fabric",
   "authors": [
     "GregTao"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.mcmod.cn/class/6074.html",
+    "sources": "https://github.com/gregtaoo/iconrenderer"
   },
 
-  "license": "MIT",
+  "license": "GPL v3.0",
   "icon": "assets/iconr/icon.png",
 
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "client": [
       "top.gregtao.iconrenderer.IconRenderer"
     ]
   },
   "mixins": [
-    "iconrenderer.mixins.json"
   ],
 
   "depends": {

@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.SimpleFramebuffer;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -13,8 +14,9 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 
@@ -30,7 +32,7 @@ public class FrameHelper {
         this.endRecord();
     }
 
-    public FrameHelper(int size, Entity entity) {
+    public FrameHelper(int size, LivingEntity entity) {
         this.framebuffer = new SimpleFramebuffer(size, size, true, MinecraftClient.IS_SYSTEM_MAC);
         this.startRecord();
         this.renderEntity(entity);
@@ -58,29 +60,18 @@ public class FrameHelper {
         this.framebuffer.endRead();
     }
 
-    public void renderEntity(Entity spawnEntity) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        VertexConsumerProvider.Immediate immediate = client.getBufferBuilders().getEntityVertexConsumers();
-
-        this.modelStack = RenderSystem.getModelViewStack();
-        this.modelStack.push();
-        this.modelStack.loadIdentity();
-        this.modelStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(112.5f));
-        this.modelStack.scale(2.5f, -2.5f, -2.5f);
-        this.modelStack.translate(0.75f, 1f, 1f);
-        this.modelStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(45f));
-        this.modelStack.translate(-0.75f, 0, 0);
-        this.modelStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(22.5f));
-        this.modelStack.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(22.5f));
-        this.modelStack.translate(0.75f, 0, 0);
-
-        if (!(client.player == null)) {
-            spawnEntity.setPos(client.player.getX(), client.player.getY(), client.player.getZ());
-        }
-
-        client.getEntityRenderDispatcher().render(spawnEntity, 0, 0, 0, 0,
-                client.getTickDelta(), this.modelStack, immediate, 15728880);
-
+    public void renderEntity(LivingEntity entity) {
+        Box box = entity.getVisibilityBoundingBox();
+        double x = box.getXLength(), z = box.getZLength();
+        int realWidth = (int) ((x + z) / Math.sqrt(2));
+        int entitySz = (int) (11 / (Math.max(realWidth, entity.getHeight())));
+        MatrixStack matrixStack = RenderSystem.getModelViewStack();
+        matrixStack.scale(1, -1, 1);
+        matrixStack.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(45f));
+        matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(22.5f));
+        matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(22.5f));
+        matrixStack.translate(54, -46, 0);
+        InventoryScreen.drawEntity(0, 0, entitySz, 0, 0, entity);
     }
 
     public void renderGuiItemIcon(ItemStack stack, int x, int y, ItemRenderer renderer) {

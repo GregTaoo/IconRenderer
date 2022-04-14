@@ -1,10 +1,10 @@
 package top.gregtao.iconrenderer;
 
 import com.google.gson.JsonObject;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 
 public class EntityJsonMeta {
-    public Entity entity;
+    public LivingEntity entity;
     public String zhName;
     public String enName;
     public String regName;
@@ -13,7 +13,7 @@ public class EntityJsonMeta {
     public String icon;
     public ImageHelper imageHelper;
 
-    public EntityJsonMeta(Entity entity) {
+    public EntityJsonMeta(LivingEntity entity) {
         this.entity = entity;
         this.regName = entity.getType().getLootTableId().toString();
         this.type = RenderType.Entity;
