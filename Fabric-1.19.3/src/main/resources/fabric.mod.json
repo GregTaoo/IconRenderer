@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "iconr",
+  "version": "${version}",
+
+  "name": "IconRenderer",
+  "description": "?",
+  "authors": [
+    "GregTao"
+  ],
+  "contact": {
+     "email": "gregtaoo@outlook.com"
+  },
+
+  "license": "GPL v3",
+  "icon": "assets/iconr/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "top.gregtao.iconr.IconRendererMain"
+    ]
+  },
+  "mixins": [
+    "iconr.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "1.19.3",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
