@@ -1,4 +1,4 @@
-package top.gregtao.iconr;
+package top.gregtao.iconr.util;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -62,7 +62,7 @@ public class RenderHelper {
     private void renderEntity(LivingEntity entity) {
         MatrixStack matrixStack = RenderSystem.getModelViewStack();
         matrixStack.translate(8, 14, 0);
-        InventoryScreen.drawEntity(0, 0, (int) (12f / Math.max(entity.getWidth(), entity.getHeight())), 25, 0, entity);
+        InventoryScreen.drawEntity(0, 0, (int) (11 / Math.max(entity.getWidth(), entity.getHeight())), 25, 0, entity);
     }
 
     private void renderGuiItemIcon(ItemStack stack, int x, int y, ItemRenderer renderer) {

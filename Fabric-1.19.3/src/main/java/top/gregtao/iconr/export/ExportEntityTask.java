@@ -1,8 +1,10 @@
-package top.gregtao.iconr;
+package top.gregtao.iconr.export;
 
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.registry.Registries;
+import top.gregtao.iconr.util.IconRUtils;
+import top.gregtao.iconr.util.RenderHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

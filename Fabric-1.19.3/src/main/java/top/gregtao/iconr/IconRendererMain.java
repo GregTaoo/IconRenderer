@@ -8,6 +8,10 @@ import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.fabricmc.loader.impl.ModContainerImpl;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
+import top.gregtao.iconr.export.ExportEntityTask;
+import top.gregtao.iconr.export.ExportItemTask;
+import top.gregtao.iconr.export.ExportRecipeTask;
+import top.gregtao.iconr.export.ExportTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +24,11 @@ public class IconRendererMain implements ClientModInitializer {
                 ClientCommandManager.literal("iconr").then(
                         ClientCommandManager.literal("single").then(
                                 ClientCommandManager.argument("namespace", StringArgumentType.word()).executes(context -> {
+                                    ClientPlayerEntity player = context.getSource().getPlayer();
                                     String modId = context.getArgument("namespace", String.class);
-                                    context.getSource().getPlayer().sendMessage(Text.literal("Trying to export mod '" + modId + "'..."));
+                                    player.sendMessage(Text.literal("Trying to export mod '" + modId + "'..."));
                                     try {
-                                        TasksExecutor.execute(List.of(new ExportItemTask(modId), new ExportEntityTask(modId)), context.getSource().getPlayer());
+                                        TasksExecutor.execute(List.of(new ExportItemTask(modId), new ExportEntityTask(modId), new ExportRecipeTask(player, modId)), player);
                                     } catch (Exception e) {
                                         throw new RuntimeException(e);
                                     }
@@ -39,8 +44,10 @@ public class IconRendererMain implements ClientModInitializer {
                                 List<ExportTask> tasks = new ArrayList<>();
                                 mods.forEach(mod -> {
                                     try {
-                                        tasks.add(new ExportItemTask(mod.getMetadata().getId()));
-                                        tasks.add(new ExportEntityTask(mod.getMetadata().getId()));
+                                        String modId = mod.getMetadata().getId();
+                                        tasks.add(new ExportItemTask(modId));
+                                        tasks.add(new ExportEntityTask(modId));
+                                        tasks.add(new ExportRecipeTask(player, modId));
                                     } catch (Exception e) {
                                         throw new RuntimeException(e);
                                     }

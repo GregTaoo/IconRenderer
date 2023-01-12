@@ -1,9 +1,11 @@
-package top.gregtao.iconr;
+package top.gregtao.iconr.export;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import top.gregtao.iconr.util.IconRUtils;
+import top.gregtao.iconr.util.RenderHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

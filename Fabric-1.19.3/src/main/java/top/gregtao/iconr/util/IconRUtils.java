@@ -1,13 +1,17 @@
-package top.gregtao.iconr;
+package top.gregtao.iconr.util;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
+import top.gregtao.iconr.mixin.SmithingRecipeAccessor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +37,15 @@ public class IconRUtils {
             if (id.getNamespace().equals(modId)) {
                 list.add(Pair.of(new ItemStack(Registries.ITEM.get(id)), ""));
             }
+        });
+        return list;
+    }
+
+    public static List<Recipe<?>> getRecipesFromMod(ClientPlayerEntity player, String modId) {
+        if (player.world == null) return List.of();
+        List<Recipe<?>> list = new ArrayList<>();
+        player.world.getRecipeManager().values().forEach(recipe -> {
+            if (recipe.getId().getNamespace().equals(modId)) list.add(recipe);
         });
         return list;
     }
@@ -71,5 +84,18 @@ public class IconRUtils {
 
     public static String base64Encode(NativeImage image) throws IOException {
         return Base64.getEncoder().encodeToString(image.getBytes());
+    }
+
+    public static Ingredient getSmithingBase(SmithingRecipe recipe) {
+        return ((SmithingRecipeAccessor) recipe).getBase();
+    }
+
+    public static Ingredient getSmithingAddition(SmithingRecipe recipe) {
+        return ((SmithingRecipeAccessor) recipe).getAddition();
+    }
+
+    public static String getRecipeTypeId(RecipeSerializer<?> serializer) {
+        Identifier identifier = Registries.RECIPE_SERIALIZER.getId(serializer);
+        return identifier == null ? "" : identifier.toString();
     }
 }

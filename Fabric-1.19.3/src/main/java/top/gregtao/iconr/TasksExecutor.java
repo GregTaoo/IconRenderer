@@ -4,14 +4,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.resource.language.LanguageDefinition;
 import net.minecraft.text.Text;
+import top.gregtao.iconr.export.ExportTask;
 
 import java.util.List;
 
 public class TasksExecutor {
     public static void execute(List<ExportTask> tasks, ClientPlayerEntity player) {
         player.sendMessage(Text.literal("Trying to export data..."));
+
         player.sendMessage(Text.literal("Storing basic info"));
         tasks.forEach(ExportTask::storeBasicInfo);
+
         player.sendMessage(Text.literal("Storing names"));
         String curLang = MinecraftClient.getInstance().options.language;
         boolean isCurEnUs = curLang.equals("en_us");
@@ -26,10 +29,13 @@ public class TasksExecutor {
             tasks.forEach(task -> task.storeDisplayName(true));
         }
         resetLanguage(curLang);
+
         player.sendMessage(Text.literal("Rendering images"));
         tasks.forEach(ExportTask::storeImages);
+
         player.sendMessage(Text.literal("Exporting json files"));
         tasks.forEach(ExportTask::export);
+
         player.sendMessage(Text.literal("Finished! If you want greater experience of rendering entities, even a GIF," +
                 " please use another mod: AnimationRecorder, which could be found on MCMOD.CN."));
     }
