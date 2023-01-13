@@ -8,6 +8,7 @@ import top.gregtao.iconr.api.IRecipeDumper;
 
 public class CraftingShapelessDumper implements IRecipeDumper<ShapelessRecipe> {
 
+    @Override
     public JsonObject dumpInputs(JsonObject object, ShapelessRecipe recipe) {
         DefaultedList<Ingredient> ingredients = recipe.getIngredients();
         for (int i = 1; i <= 9 && i <= ingredients.size(); ++i) {
@@ -16,8 +17,9 @@ public class CraftingShapelessDumper implements IRecipeDumper<ShapelessRecipe> {
         return object;
     }
 
+    @Override
     public JsonObject dumpOutputs(JsonObject object, ShapelessRecipe recipe) {
-        object.add("1", IRecipeDumper.dumpItemStack(recipe.getOutput()));
+        object.add("1", IRecipeDumper.fromItemStack(recipe.getOutput()));
         return object;
     }
 }

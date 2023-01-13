@@ -8,6 +8,7 @@ import top.gregtao.iconr.api.IRecipeDumper;
 
 public class CraftingShapedDumper implements IRecipeDumper<ShapedRecipe> {
 
+    @Override
     public JsonObject dumpInputs(JsonObject object, ShapedRecipe recipe) {
         DefaultedList<Ingredient> ingredients = recipe.getIngredients();
         int width = recipe.getWidth(), height = recipe.getHeight();
@@ -25,8 +26,9 @@ public class CraftingShapedDumper implements IRecipeDumper<ShapedRecipe> {
         return object;
     }
 
+    @Override
     public JsonObject dumpOutputs(JsonObject object, ShapedRecipe recipe) {
-        object.add("1", IRecipeDumper.dumpItemStack(recipe.getOutput()));
+        object.add("1", IRecipeDumper.fromItemStack(recipe.getOutput()));
         return object;
     }
 }

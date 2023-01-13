@@ -7,14 +7,16 @@ import top.gregtao.iconr.util.IconRUtils;
 
 public class SmithingRecipeDumper implements IRecipeDumper<SmithingRecipe> {
 
+    @Override
     public JsonObject dumpInputs(JsonObject object, SmithingRecipe recipe) {
         object.add("1", IconRUtils.getSmithingBase(recipe).toJson());
         object.add("2", IconRUtils.getSmithingAddition(recipe).toJson());
         return object;
     }
 
+    @Override
     public JsonObject dumpOutputs(JsonObject object, SmithingRecipe recipe) {
-        object.add("1", IRecipeDumper.dumpItemStack(recipe.getOutput()));
+        object.add("1", IRecipeDumper.fromItemStack(recipe.getOutput()));
         return object;
     }
 }

@@ -20,6 +20,7 @@ public class ExportRecipeTask extends ExportFile implements IExportTask {
         this.recipes = IconRUtils.getRecipesFromMod(player, modId);
     }
 
+    @Override
     public void storeBasicInfo() {
         JsonArray recipes = new JsonArray();
         JsonArray error = new JsonArray();
@@ -34,10 +35,7 @@ public class ExportRecipeTask extends ExportFile implements IExportTask {
         this.jsonObject.add("error", error);
     }
 
-    public void storeDisplayName(boolean isEnglish) {}
-
-    public void storeImages() {}
-
+    @Override
     public void export() {
         if (this.recipes.isEmpty()) return;
         try {

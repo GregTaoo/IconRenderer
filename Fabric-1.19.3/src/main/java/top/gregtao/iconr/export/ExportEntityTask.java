@@ -22,6 +22,7 @@ public class ExportEntityTask extends ExportFile implements IExportTask {
         this.entities = IconRUtils.getEntitiesFromMod(modId);
     }
 
+    @Override
     public void storeBasicInfo() {
         for (LivingEntity entity : this.entities) {
             JsonObject map = new JsonObject();
@@ -30,6 +31,7 @@ public class ExportEntityTask extends ExportFile implements IExportTask {
         }
     }
 
+    @Override
     public void storeDisplayName(boolean isEnglish) {
         String key = isEnglish ? "englishName" : "name";
         int amount = this.entities.size();
@@ -38,6 +40,7 @@ public class ExportEntityTask extends ExportFile implements IExportTask {
         }
     }
 
+    @Override
     public void storeImages() {
         try {
             int amount = this.entities.size();
@@ -53,6 +56,7 @@ public class ExportEntityTask extends ExportFile implements IExportTask {
         }
     }
 
+    @Override
     public void export() {
         if (this.entities.isEmpty()) return;
         try {

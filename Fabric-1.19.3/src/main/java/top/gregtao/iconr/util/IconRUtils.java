@@ -1,10 +1,7 @@
 package top.gregtao.iconr.util;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.resource.language.LanguageDefinition;
@@ -12,7 +9,10 @@ import net.minecraft.client.texture.NativeImage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.*;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SmithingRecipe;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -22,24 +22,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 
 public class IconRUtils {
     public static List<ItemStack> getItemsFromMod(String modId) {
         List<ItemStack> list = new ArrayList<>();
-        /* ?
-        ItemGroups.getGroups().forEach(itemGroup -> {
-            if (itemGroup != ItemGroups.HOTBAR && itemGroup != ItemGroups.INVENTORY && itemGroup != ItemGroups.SEARCH) {
-                System.out.println(itemGroup.getId());
-                System.out.println(itemGroup.getDisplayStacks().size());
-                itemGroup.getDisplayStacks().forEach(itemStack -> {
-                    if (Registries.ITEM.getId(itemStack.getItem()).getNamespace().equals(modId)) {
-                        list.add(Pair.of(itemStack.copy(), itemGroup.getDisplayName().getString()));
-                    }
-                });
-            }
-        });
-        */
         Registries.ITEM.getIds().forEach(id -> {
             if (id.getNamespace().equals(modId)) {
                 list.add(new ItemStack(Registries.ITEM.get(id)));

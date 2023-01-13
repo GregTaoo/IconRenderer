@@ -31,7 +31,7 @@ public interface IRecipeDumper<T extends Recipe<?>> {
 
     default void dumpExtraInfo(JsonObject object, T recipe) {}
 
-    static JsonObject dumpItemStack(ItemStack itemStack) {
+    static JsonObject fromItemStack(ItemStack itemStack) {
         JsonObject object = new JsonObject();
         object.addProperty("item", Registries.ITEM.getId(itemStack.getItem()).toString());
         object.addProperty("count", itemStack.getCount());

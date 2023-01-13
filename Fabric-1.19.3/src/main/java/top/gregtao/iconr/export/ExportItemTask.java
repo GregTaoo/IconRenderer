@@ -23,6 +23,7 @@ public class ExportItemTask extends ExportFile implements IExportTask {
         this.modId = modId;
     }
 
+    @Override
     public void storeBasicInfo() {
         for (ItemStack itemStack : this.items) {
             JsonObject map = new JsonObject();
@@ -35,6 +36,7 @@ public class ExportItemTask extends ExportFile implements IExportTask {
         }
     }
 
+    @Override
     public void storeDisplayName(boolean isEnglish) {
         String key = isEnglish ? "englishName" : "name";
         int amount = this.items.size();
@@ -48,6 +50,7 @@ public class ExportItemTask extends ExportFile implements IExportTask {
         }
     }
 
+    @Override
     public void storeImages() {
         try {
             int amount = this.items.size();
@@ -67,6 +70,7 @@ public class ExportItemTask extends ExportFile implements IExportTask {
         }
     }
 
+    @Override
     public void export() {
         if (this.items.isEmpty()) return;
         try {

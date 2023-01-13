@@ -4,7 +4,6 @@ plugins {
 }
 
 group 'top.gregtao.iconr'
-version '1.0.0'
 
 apply plugin: 'java'
 
