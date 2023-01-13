@@ -1,21 +1,21 @@
 package top.gregtao.iconr.export;
 
-import com.mojang.datafixers.util.Pair;
+import com.google.gson.JsonObject;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import top.gregtao.iconr.api.IExportTask;
 import top.gregtao.iconr.util.IconRUtils;
+import top.gregtao.iconr.util.ItemGroupHelper;
 import top.gregtao.iconr.util.RenderHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ExportItemTask extends ExportFile implements ExportTask {
+public class ExportItemTask extends ExportFile implements IExportTask {
     private final String modId;
-    private final List<Map<String, String>> metas = new ArrayList<>();
-    private final List<Pair<ItemStack, String>> items; // Item, CreativeTabName
+    private final List<JsonObject> metas = new ArrayList<>();
+    private final List<ItemStack> items; // Item, CreativeTabName
 
     public ExportItemTask(String modId) {
         super("Json/" + modId + "/" + modId + "-items.json");
@@ -24,15 +24,13 @@ public class ExportItemTask extends ExportFile implements ExportTask {
     }
 
     public void storeBasicInfo() {
-        for (Pair<ItemStack, String> item : this.items) {
-            HashMap<String, String> map = new HashMap<>();
-            ItemStack itemStack = item.getFirst();
-            map.put("registerName", Registries.ITEM.getId(itemStack.getItem()).toString());
-            map.put("CreativeTabName", item.getSecond());
-            map.put("type", "Item");
-            map.put("maxStackSize", String.valueOf(itemStack.getMaxCount()));
-            map.put("maxDurability", String.valueOf(itemStack.getMaxDamage()));
-            map.put("TagList", IconRUtils.tagKeyList2String(itemStack.streamTags().toList()));
+        for (ItemStack itemStack : this.items) {
+            JsonObject map = new JsonObject();
+            map.addProperty("registerName", Registries.ITEM.getId(itemStack.getItem()).toString());
+            map.addProperty("type", "Item");
+            map.addProperty("maxStackSize", String.valueOf(itemStack.getMaxCount()));
+            map.addProperty("maxDurability", String.valueOf(itemStack.getMaxDamage()));
+            map.add("TagList", IconRUtils.tagKeyList2Json(itemStack.streamTags().toList()));
             this.metas.add(map);
         }
     }
@@ -41,8 +39,12 @@ public class ExportItemTask extends ExportFile implements ExportTask {
         String key = isEnglish ? "englishName" : "name";
         int amount = this.items.size();
         for (int i = 0; i < amount; ++i) {
-            ItemStack itemStack = this.items.get(i).getFirst();
-            this.metas.get(i).put(key, itemStack.getItem().getName().getString());
+            ItemStack itemStack = this.items.get(i);
+            JsonObject map = this.metas.get(i);
+            map.addProperty(key, itemStack.getItem().getName().getString());
+            if (!isEnglish) {
+                map.addProperty("CreativeTabName", String.join(",", ItemGroupHelper.INSTANCE.get(itemStack.getItem())));
+            }
         }
     }
 
@@ -50,11 +52,11 @@ public class ExportItemTask extends ExportFile implements ExportTask {
         try {
             int amount = this.items.size();
             for (int i = 0; i < amount; ++i) {
-                ItemStack itemStack = this.items.get(i).getFirst();
+                ItemStack itemStack = this.items.get(i);
                 NativeImage large = RenderHelper.renderItemStack(128, itemStack);
-                this.metas.get(i).put("largeIcon", IconRUtils.base64Encode(large));
+                this.metas.get(i).addProperty("largeIcon", IconRUtils.base64Encode(large));
                 NativeImage small = RenderHelper.renderItemStack(32, itemStack);
-                this.metas.get(i).put("smallIcon", IconRUtils.base64Encode(small));
+                this.metas.get(i).addProperty("smallIcon", IconRUtils.base64Encode(small));
                 large.writeTo(ExportFile.of("Images/" + this.modId + "/Items/" +
                         Registries.ITEM.getId(itemStack.getItem()).getPath() + "-128px.png", true));
                 small.writeTo(ExportFile.of("Images/" + this.modId + "/Items/" +
@@ -69,8 +71,8 @@ public class ExportItemTask extends ExportFile implements ExportTask {
         if (this.items.isEmpty()) return;
         try {
             this.start();
-            for (Map<String, String> meta : this.metas) {
-                this.write(IconRUtils.map2String(meta));
+            for (JsonObject meta : this.metas) {
+                this.write(meta.toString());
             }
             this.finish();
         } catch (Exception e) {

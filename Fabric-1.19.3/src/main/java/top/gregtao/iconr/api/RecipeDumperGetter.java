@@ -3,30 +3,29 @@ package top.gregtao.iconr.api;
 import com.google.gson.JsonObject;
 import net.minecraft.recipe.*;
 import top.gregtao.iconr.recipe.NoRecipeDumperException;
-import top.gregtao.iconr.recipe.RecipeDumper;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RecipeDumperGetter {
-    private static final Map<Class<? extends Recipe<?>>, RecipeDumper<Recipe<?>>> DUMPERS = new HashMap<>();
+    private static final Map<Class<? extends Recipe<?>>, IRecipeDumper<Recipe<?>>> DUMPERS = new HashMap<>();
 
-    // WTF
+    // Add dumpers before the client side command being executed
     @SuppressWarnings("unchecked")
-    public static void addDumper(Class<? extends Recipe<?>> recipeClass, RecipeDumper<? extends Recipe<?>> dumper) {
-        DUMPERS.put(recipeClass, (RecipeDumper<Recipe<?>>) dumper);
+    public static void addDumper(Class<? extends Recipe<?>> recipeClass, IRecipeDumper<? extends Recipe<?>> dumper) {
+        DUMPERS.put(recipeClass, (IRecipeDumper<Recipe<?>>) dumper);
     }
 
     static {
-        addDumper(ShapedRecipe.class, RecipeDumper.SHAPED_DUMPER);
-        addDumper(ShapelessRecipe.class, RecipeDumper.SHAPELESS_DUMPER);
-        addDumper(StonecuttingRecipe.class, RecipeDumper.STONE_CUTTING_DUMPER);
-        addDumper(SmithingRecipe.class, RecipeDumper.SMITHING_DUMPER);
+        addDumper(ShapedRecipe.class, IRecipeDumper.SHAPED_DUMPER);
+        addDumper(ShapelessRecipe.class, IRecipeDumper.SHAPELESS_DUMPER);
+        addDumper(StonecuttingRecipe.class, IRecipeDumper.STONE_CUTTING_DUMPER);
+        addDumper(SmithingRecipe.class, IRecipeDumper.SMITHING_DUMPER);
 
-        addDumper(SmeltingRecipe.class, RecipeDumper.COOKING_DUMPER);
-        addDumper(CampfireCookingRecipe.class, RecipeDumper.COOKING_DUMPER);
-        addDumper(SmokingRecipe.class, RecipeDumper.COOKING_DUMPER);
-        addDumper(BlastingRecipe.class, RecipeDumper.COOKING_DUMPER);
+        addDumper(SmeltingRecipe.class, IRecipeDumper.COOKING_DUMPER);
+        addDumper(CampfireCookingRecipe.class, IRecipeDumper.COOKING_DUMPER);
+        addDumper(SmokingRecipe.class, IRecipeDumper.COOKING_DUMPER);
+        addDumper(BlastingRecipe.class, IRecipeDumper.COOKING_DUMPER);
     }
 
     public static JsonObject dumpRecipe(Recipe<?> recipe) throws NoRecipeDumperException {

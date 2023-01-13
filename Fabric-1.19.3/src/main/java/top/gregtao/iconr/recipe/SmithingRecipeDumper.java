@@ -2,9 +2,10 @@ package top.gregtao.iconr.recipe;
 
 import com.google.gson.JsonObject;
 import net.minecraft.recipe.SmithingRecipe;
+import top.gregtao.iconr.api.IRecipeDumper;
 import top.gregtao.iconr.util.IconRUtils;
 
-public class SmithingRecipeDumper implements RecipeDumper<SmithingRecipe> {
+public class SmithingRecipeDumper implements IRecipeDumper<SmithingRecipe> {
 
     public JsonObject dumpInputs(JsonObject object, SmithingRecipe recipe) {
         object.add("1", IconRUtils.getSmithingBase(recipe).toJson());
@@ -13,7 +14,7 @@ public class SmithingRecipeDumper implements RecipeDumper<SmithingRecipe> {
     }
 
     public JsonObject dumpOutputs(JsonObject object, SmithingRecipe recipe) {
-        object.add("1", RecipeDumper.dumpItemStack(recipe.getOutput()));
+        object.add("1", IRecipeDumper.dumpItemStack(recipe.getOutput()));
         return object;
     }
 }

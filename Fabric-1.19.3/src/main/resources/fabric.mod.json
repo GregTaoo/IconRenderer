@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "IconRenderer",
-  "description": "?",
+  "description": "Exporting json files or images of items&entities, for mcmod.cn",
   "authors": [
     "GregTao"
   ],

@@ -1,18 +1,19 @@
-package top.gregtao.iconr.recipe;
+package top.gregtao.iconr.api;
 
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.*;
 import net.minecraft.registry.Registries;
+import top.gregtao.iconr.recipe.*;
 import top.gregtao.iconr.util.IconRUtils;
 
-public interface RecipeDumper<T extends Recipe<?>> {
+public interface IRecipeDumper<T extends Recipe<?>> {
 
-    RecipeDumper<ShapedRecipe> SHAPED_DUMPER = new CraftingShapedDumper();
-    RecipeDumper<ShapelessRecipe> SHAPELESS_DUMPER = new CraftingShapelessDumper();
-    RecipeDumper<StonecuttingRecipe> STONE_CUTTING_DUMPER = new StoneCuttingDumper();
-    RecipeDumper<SmithingRecipe> SMITHING_DUMPER = new SmithingRecipeDumper();
-    RecipeDumper<AbstractCookingRecipe> COOKING_DUMPER = new CookingDumper();
+    IRecipeDumper<ShapedRecipe> SHAPED_DUMPER = new CraftingShapedDumper();
+    IRecipeDumper<ShapelessRecipe> SHAPELESS_DUMPER = new CraftingShapelessDumper();
+    IRecipeDumper<StonecuttingRecipe> STONE_CUTTING_DUMPER = new StoneCuttingDumper();
+    IRecipeDumper<SmithingRecipe> SMITHING_DUMPER = new SmithingRecipeDumper();
+    IRecipeDumper<AbstractCookingRecipe> COOKING_DUMPER = new CookingDumper();
 
     default JsonObject dump(T recipe) {
         JsonObject object = new JsonObject();

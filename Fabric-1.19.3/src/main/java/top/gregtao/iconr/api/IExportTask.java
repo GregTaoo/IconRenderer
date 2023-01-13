@@ -1,6 +1,6 @@
-package top.gregtao.iconr.export;
+package top.gregtao.iconr.api;
 
-public interface ExportTask {
+public interface IExportTask {
     void storeBasicInfo();
 
     void storeDisplayName(boolean isEnglish);

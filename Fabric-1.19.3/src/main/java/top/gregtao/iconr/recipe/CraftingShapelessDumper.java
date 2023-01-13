@@ -4,8 +4,9 @@ import com.google.gson.JsonObject;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.collection.DefaultedList;
+import top.gregtao.iconr.api.IRecipeDumper;
 
-public class CraftingShapelessDumper implements RecipeDumper<ShapelessRecipe> {
+public class CraftingShapelessDumper implements IRecipeDumper<ShapelessRecipe> {
 
     public JsonObject dumpInputs(JsonObject object, ShapelessRecipe recipe) {
         DefaultedList<Ingredient> ingredients = recipe.getIngredients();
@@ -16,7 +17,7 @@ public class CraftingShapelessDumper implements RecipeDumper<ShapelessRecipe> {
     }
 
     public JsonObject dumpOutputs(JsonObject object, ShapelessRecipe recipe) {
-        object.add("1", RecipeDumper.dumpItemStack(recipe.getOutput()));
+        object.add("1", IRecipeDumper.dumpItemStack(recipe.getOutput()));
         return object;
     }
 }

@@ -1,8 +1,13 @@
 package top.gregtao.iconr.util;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.resource.language.LanguageDefinition;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -20,22 +25,24 @@ import java.util.List;
 import java.util.Map;
 
 public class IconRUtils {
-    public static List<Pair<ItemStack, String>> getItemsFromMod(String modId) {
-        List<Pair<ItemStack, String>> list = new ArrayList<>();
-//        ItemGroups.getGroups().forEach(itemGroup -> {
-//            if (itemGroup != ItemGroups.HOTBAR && itemGroup != ItemGroups.INVENTORY && itemGroup != ItemGroups.SEARCH) {
-//                System.out.println(itemGroup.getId());
-//                System.out.println(itemGroup.getDisplayStacks().size());
-//                itemGroup.getDisplayStacks().forEach(itemStack -> {
-//                    if (Registries.ITEM.getId(itemStack.getItem()).getNamespace().equals(modId)) {
-//                        list.add(Pair.of(itemStack.copy(), itemGroup.getDisplayName().getString()));
-//                    }
-//                });
-//            }
-//        });
+    public static List<ItemStack> getItemsFromMod(String modId) {
+        List<ItemStack> list = new ArrayList<>();
+        /* ?
+        ItemGroups.getGroups().forEach(itemGroup -> {
+            if (itemGroup != ItemGroups.HOTBAR && itemGroup != ItemGroups.INVENTORY && itemGroup != ItemGroups.SEARCH) {
+                System.out.println(itemGroup.getId());
+                System.out.println(itemGroup.getDisplayStacks().size());
+                itemGroup.getDisplayStacks().forEach(itemStack -> {
+                    if (Registries.ITEM.getId(itemStack.getItem()).getNamespace().equals(modId)) {
+                        list.add(Pair.of(itemStack.copy(), itemGroup.getDisplayName().getString()));
+                    }
+                });
+            }
+        });
+        */
         Registries.ITEM.getIds().forEach(id -> {
             if (id.getNamespace().equals(modId)) {
-                list.add(Pair.of(new ItemStack(Registries.ITEM.get(id)), ""));
+                list.add(new ItemStack(Registries.ITEM.get(id)));
             }
         });
         return list;
@@ -45,7 +52,9 @@ public class IconRUtils {
         if (player.world == null) return List.of();
         List<Recipe<?>> list = new ArrayList<>();
         player.world.getRecipeManager().values().forEach(recipe -> {
-            if (recipe.getId().getNamespace().equals(modId)) list.add(recipe);
+            if (recipe.getId().getNamespace().equals(modId)) {
+                list.add(recipe);
+            }
         });
         return list;
     }
@@ -63,23 +72,12 @@ public class IconRUtils {
         return list;
     }
 
-    public static String map2String(Map<String, String> map) {
-        StringBuilder builder = new StringBuilder("{");
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            builder.append('\"').append(entry.getKey()).append('\"').append(':');
-            builder.append('\"').append(entry.getValue()).append('\"').append(',');
-        }
-        builder.deleteCharAt(builder.length() - 1);
-        return builder.append("}").toString();
-    }
-
-    public static <T> String tagKeyList2String(List<TagKey<T>> list) {
-        StringBuilder builder = new StringBuilder("[");
+    public static <T> JsonElement tagKeyList2Json(List<TagKey<T>> list) {
+        JsonArray array = new JsonArray();
         for (TagKey<T> entry : list) {
-            builder.append(entry.id().toString()).append(',');
+            array.add(entry.id().toString());
         }
-        builder.deleteCharAt(builder.length() - 1);
-        return builder.append("]").toString();
+        return array;
     }
 
     public static String base64Encode(NativeImage image) throws IOException {
@@ -97,5 +95,21 @@ public class IconRUtils {
     public static String getRecipeTypeId(RecipeSerializer<?> serializer) {
         Identifier identifier = Registries.RECIPE_SERIALIZER.getId(serializer);
         return identifier == null ? "" : identifier.toString();
+    }
+
+    public static String getCurrentLanguage() {
+        return MinecraftClient.getInstance().options.language;
+    }
+
+    public static void resetLanguage(String lang) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (!client.options.language.equals(lang)) {
+            LanguageDefinition langDefinition = new LanguageDefinition(lang, "", "", false);
+            client.getLanguageManager().setLanguage(langDefinition);
+            client.options.language = langDefinition.getCode();
+            client.reloadResources();
+            client.options.write();
+            client.getLanguageManager().reload(client.getResourceManager());
+        }
     }
 }

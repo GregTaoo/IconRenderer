@@ -1,19 +1,19 @@
 package top.gregtao.iconr.export;
 
+import com.google.gson.JsonObject;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.registry.Registries;
+import top.gregtao.iconr.api.IExportTask;
 import top.gregtao.iconr.util.IconRUtils;
 import top.gregtao.iconr.util.RenderHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ExportEntityTask extends ExportFile implements ExportTask {
+public class ExportEntityTask extends ExportFile implements IExportTask {
     private final String modId;
-    private final List<Map<String, String>> metas = new ArrayList<>();
+    private final List<JsonObject> metas = new ArrayList<>();
     private final List<LivingEntity> entities;
 
     public ExportEntityTask(String modId) {
@@ -24,8 +24,8 @@ public class ExportEntityTask extends ExportFile implements ExportTask {
 
     public void storeBasicInfo() {
         for (LivingEntity entity : this.entities) {
-            HashMap<String, String> map = new HashMap<>();
-            map.put("registerName", Registries.ENTITY_TYPE.getId(entity.getType()).toString());
+            JsonObject map = new JsonObject();
+            map.addProperty("registerName", Registries.ENTITY_TYPE.getId(entity.getType()).toString());
             this.metas.add(map);
         }
     }
@@ -34,7 +34,7 @@ public class ExportEntityTask extends ExportFile implements ExportTask {
         String key = isEnglish ? "englishName" : "name";
         int amount = this.entities.size();
         for (int i = 0; i < amount; ++i) {
-            this.metas.get(i).put(key, entities.get(i).getName().getString());
+            this.metas.get(i).addProperty(key, this.entities.get(i).getName().getString());
         }
     }
 
@@ -44,7 +44,7 @@ public class ExportEntityTask extends ExportFile implements ExportTask {
             for (int i = 0; i < amount; ++i) {
                 LivingEntity entity = this.entities.get(i);
                 NativeImage image = RenderHelper.renderLivingEntity(128, entity);
-                this.metas.get(i).put("Icon", IconRUtils.base64Encode(image));
+                this.metas.get(i).addProperty("Icon", IconRUtils.base64Encode(image));
                 image.writeTo(ExportFile.of("Images/" + this.modId + "/Entities/" +
                         Registries.ENTITY_TYPE.getId(entity.getType()).getPath() + "-128px.png", true));
             }
@@ -57,8 +57,8 @@ public class ExportEntityTask extends ExportFile implements ExportTask {
         if (this.entities.isEmpty()) return;
         try {
             this.start();
-            for (Map<String, String> meta : this.metas) {
-                this.write(IconRUtils.map2String(meta));
+            for (JsonObject meta : this.metas) {
+                this.write(meta.toString());
             }
             this.finish();
         } catch (Exception e) {

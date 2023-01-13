@@ -4,13 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.recipe.Recipe;
+import top.gregtao.iconr.api.IExportTask;
 import top.gregtao.iconr.util.IconRUtils;
 import top.gregtao.iconr.api.RecipeDumperGetter;
 import top.gregtao.iconr.recipe.NoRecipeDumperException;
 
 import java.util.List;
 
-public class ExportRecipeTask extends ExportFile implements ExportTask {
+public class ExportRecipeTask extends ExportFile implements IExportTask {
     private final JsonObject jsonObject = new JsonObject();
     private final List<Recipe<?>> recipes;
 

@@ -8,10 +8,11 @@ import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.fabricmc.loader.impl.ModContainerImpl;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.text.Text;
+import top.gregtao.iconr.api.IExportTask;
 import top.gregtao.iconr.export.ExportEntityTask;
 import top.gregtao.iconr.export.ExportItemTask;
 import top.gregtao.iconr.export.ExportRecipeTask;
-import top.gregtao.iconr.export.ExportTask;
+import top.gregtao.iconr.util.ItemGroupHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class IconRendererMain implements ClientModInitializer {
                                 ClientPlayerEntity player = context.getSource().getPlayer();
                                 player.sendMessage(Text.literal("Trying to export all mods..."));
                                 List<ModContainerImpl> mods = FabricLoaderImpl.INSTANCE.getModsInternal();
-                                List<ExportTask> tasks = new ArrayList<>();
+                                List<IExportTask> tasks = new ArrayList<>();
                                 mods.forEach(mod -> {
                                     try {
                                         String modId = mod.getMetadata().getId();
@@ -58,7 +59,15 @@ public class IconRendererMain implements ClientModInitializer {
                             }
                             return 0;
                         })
+                ).then(
+                        ClientCommandManager.literal("reload").executes(context -> {
+                            ItemGroupHelper.INSTANCE.load();
+                            context.getSource().getPlayer().sendMessage(Text.literal("Reloaded item groups."));
+                            return 0;
+                        })
                 )
         ));
+
+        TasksExecutor.LOGGER.info("Loaded IconRenderer.");
     }
 }
