@@ -16,7 +16,11 @@ public class ItemGroupHelper {
 
     private final Map<Item, List<String>> itemListMap = new HashMap<>();
 
-    public boolean loaded = false;
+    private boolean loaded = false;
+
+    protected ItemGroupHelper() {
+        // QwQ
+    }
 
     public void load() {
         String curLang = IconRUtils.getCurrentLanguage();
