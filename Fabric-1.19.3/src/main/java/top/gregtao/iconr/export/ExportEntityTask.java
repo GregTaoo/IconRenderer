@@ -59,6 +59,7 @@ public class ExportEntityTask extends ExportFile implements IExportTask {
             this.start();
             for (JsonObject meta : this.metas) {
                 this.write(meta.toString());
+                this.write("\n");
             }
             this.finish();
         } catch (Exception e) {

@@ -26,6 +26,7 @@ public class ItemGroupHelper {
         String curLang = IconRUtils.getCurrentLanguage();
         IconRUtils.resetLanguage("zh_cn");
 
+        this.itemListMap.clear();
         ItemGroups.updateDisplayParameters(FeatureFlags.DEFAULT_ENABLED_FEATURES, true);
         ItemGroups.getGroups().forEach(itemGroup -> {
             if (!itemGroup.isSpecial()) {
