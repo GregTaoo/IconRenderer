@@ -9,8 +9,7 @@ apply plugin: 'java'
 
 project(":Fabric-1.19.3") {
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 17
@@ -19,8 +18,7 @@ project(":Fabric-1.19.3") {
 
 project(":Fabric-1.19.2") {
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 17
@@ -29,8 +27,7 @@ project(":Fabric-1.19.2") {
 
 project(":Fabric-1.18.2") {
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 17
@@ -40,8 +37,7 @@ project(":Fabric-1.18.2") {
 
 project(":Fabric-1.17.1") {
 
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 16
@@ -51,8 +47,7 @@ project(":Fabric-1.17.1") {
 
 project(":Fabric-1.16.5") {
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 8
@@ -60,7 +55,7 @@ project(":Fabric-1.16.5") {
 
 }
 
-subprojects {
+subprojects() {
     apply plugin: 'fabric-loom'
 
     archivesBaseName = project.archives_base_name
@@ -70,6 +65,7 @@ subprojects {
     dependencies {
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
         modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     }
