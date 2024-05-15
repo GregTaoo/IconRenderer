@@ -1,11 +1,22 @@
 plugins {
-    id 'fabric-loom' version '0.12-SNAPSHOT' apply(false)
+    id 'fabric-loom' version '1.+' apply(false)
     id 'maven-publish'
 }
 
 group 'top.gregtao.iconr'
 
-apply plugin: 'java'
+allprojects {
+    apply plugin: 'java'
+}
+
+project(":Fabric-1.19.4") {
+
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
+}
 
 project(":Fabric-1.19.3") {
 
@@ -85,13 +96,14 @@ subprojects() {
     }
 }
 
-build {
-    finalizedBy "copyFiles"
-}
-
-task copyFiles(type: Copy) {
+tasks.register('copyFiles', Copy) {
     project.subprojects.forEach(project -> {
         from(project.name + "/build/libs/" + project.archivesBaseName + "-" + project.getVersion() + ".jar")
     })
     into(".builtFiles")
 }
+
+build {
+    finalizedBy "copyFiles"
+}
+

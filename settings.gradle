@@ -7,6 +7,7 @@ pluginManagement {
 
 
 rootProject.name = 'IconRenderer'
+include 'Fabric-1.19.4'
 include 'Fabric-1.19.3'
 include 'Fabric-1.19.2'
 include 'Fabric-1.18.2'
