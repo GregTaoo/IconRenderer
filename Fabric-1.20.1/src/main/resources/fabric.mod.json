@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "iconr",
+  "version": "${version}",
+
+  "name": "IconRenderer",
+  "description": "Exporting json files or images of items&entities&recipes, for mcmod.cn",
+  "authors": [
+    "GregTao"
+  ],
+  "contact": {
+     "email": "gregtaoo@outlook.com"
+  },
+
+  "license": "GPL v3",
+  "icon": "assets/iconr/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "top.gregtao.iconr.IconRendererMain"
+    ]
+  },
+  "mixins": [
+    "iconr.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "1.20.1",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

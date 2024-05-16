@@ -9,6 +9,15 @@ allprojects {
     apply plugin: 'java'
 }
 
+project(":Fabric-1.20.1") {
+
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
+}
+
 project(":Fabric-1.19.4") {
 
     sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
@@ -93,6 +102,10 @@ subprojects() {
         from("LICENSE") {
             rename { "${it}_${project.archivesBaseName}"}
         }
+    }
+
+    java {
+        withSourcesJar()
     }
 }
 
