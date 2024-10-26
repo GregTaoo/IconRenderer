@@ -20,6 +20,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import org.joml.Matrix4f;
+import top.gregtao.iconr.TasksExecutor;
 
 public class RenderHelper {
     private final Framebuffer framebuffer;
@@ -66,7 +67,11 @@ public class RenderHelper {
         DrawContext context = new DrawContext(MinecraftClient.getInstance(), immediate);
         context.getMatrices().translate(8, 14, 0);
         context.getMatrices().push();
-        InventoryScreen.drawEntity(context, 0, 0, (int) (11 / Math.max(entity.getWidth(), entity.getHeight())), 25, 0, entity);
+        try {
+            InventoryScreen.drawEntity(context, 0, 0, (int) (11 / Math.max(entity.getWidth(), entity.getHeight())), 25, 0, entity);
+        } catch (Exception e) {
+            TasksExecutor.LOGGER.error("Cannot render entity {} because entityRenderer not exists, skipping", entity.getDisplayName().getString());
+        }
         context.getMatrices().pop();
     }
 
